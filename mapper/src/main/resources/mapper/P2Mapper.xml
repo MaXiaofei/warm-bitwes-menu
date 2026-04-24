@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.P2Mapper">
+
+    <delete id="deletePrepItemsBySessionId" parameterType="long">
+        <!-- 删除会话已生成的备菜清单（用于重新生成） -->
+        DELETE FROM prep_item
+        WHERE session_id = #{sessionId}
+    </delete>
+
+    <insert id="batchInsertPrepItems">
+        <!-- 批量新增备菜项 -->
+        INSERT INTO prep_item(session_id, ingredient_id, plan_amount_g, status, is_shortage, note, remark)
+        VALUES
+        <foreach collection="items" item="item" separator=",">
+            (#{item.sessionId}, #{item.ingredientId}, #{item.planAmountG}, #{item.status}, #{item.isShortage}, NULL, NULL)
+        </foreach>
+    </insert>
+
+    <select id="selectPrepItemsBySessionId" parameterType="long" resultType="map">
+        <!-- 查询会话备菜清单（带食材基础信息） -->
+        SELECT
+            pi.ingredient_id AS ingredientId,
+            i.name AS ingredientName,
+            i.unit AS unit,
+            pi.plan_amount_g AS planAmountG,
+            pi.status AS status,
+            pi.is_shortage AS isShortage
+        FROM prep_item pi
+        INNER JOIN ingredient i ON i.id = pi.ingredient_id
+        WHERE pi.session_id = #{sessionId}
+        ORDER BY pi.ingredient_id ASC
+    </select>
+
+    <insert id="insertSessionReview" parameterType="com.warmbitwes.menu.entity.SessionReview">
+        <!-- 新增会话口味点评 -->
+        INSERT INTO session_review(session_id, dish_id, taste_score, difficulty_score, retry_intent, review_note, remark)
+        VALUES (#{sessionId}, NULL, #{tasteScore}, NULL, NULL, NULL, NULL)
+    </insert>
+
+    <select id="selectReviewsBySessionId" parameterType="long" resultType="map">
+        <!-- 查询会话点评列表 -->
+        SELECT
+            id AS reviewId,
+            session_id AS sessionId,
+            dish_id AS dishId,
+            taste_score AS tasteScore,
+            difficulty_score AS difficultyScore,
+            retry_intent AS retryIntent,
+            review_note AS reviewNote,
+            created_at AS createdAt
+        FROM session_review
+        WHERE session_id = #{sessionId}
+        ORDER BY id DESC
+    </select>
+</mapper>
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.IngredientMapper">
+
+    <resultMap id="IngredientMap" type="com.warmbitwes.menu.entity.Ingredient">
+        <id     property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="unit" column="unit"/>
+        <result property="caloriesKcalPer100g" column="calories_kcal_per_100g"/>
+        <result property="giValue" column="gi_value"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="IngredientMap">
+        <!-- 查询全量食材列表（按 id 倒序） -->
+        SELECT id, name, unit, calories_kcal_per_100g, gi_value, remark, created_at, updated_at
+        FROM ingredient
+        ORDER BY id DESC
+    </select>
+
+    <select id="selectPage" resultMap="IngredientMap">
+        <!-- 食材分页查询（按 id 倒序） -->
+        SELECT id, name, unit, calories_kcal_per_100g, gi_value, remark, created_at, updated_at
+        FROM ingredient
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectById" parameterType="long" resultMap="IngredientMap">
+        <!-- 按主键查询食材 -->
+        SELECT id, name, unit, calories_kcal_per_100g, gi_value, remark, created_at, updated_at
+        FROM ingredient
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.warmbitwes.menu.entity.Ingredient"
+            useGeneratedKeys="true" keyProperty="id">
+        <!-- 新增食材（返回自增主键 id） -->
+        INSERT INTO ingredient(name, unit, calories_kcal_per_100g, gi_value, remark)
+        VALUES (#{name}, #{unit}, #{caloriesKcalPer100g}, #{giValue}, #{remark})
+    </insert>
+
+    <update id="updateById" parameterType="com.warmbitwes.menu.entity.Ingredient">
+        <!-- 按主键更新食材（显式刷新 updated_at） -->
+        UPDATE ingredient
+        SET name = #{name},
+            unit = #{unit},
+            calories_kcal_per_100g = #{caloriesKcalPer100g},
+            gi_value = #{giValue},
+            remark = #{remark},
+            updated_at = CURRENT_TIMESTAMP(3)
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        <!-- 按主键删除食材（物理删除，V1 可用于联调；后续可改软删） -->
+        DELETE FROM ingredient WHERE id = #{id}
+    </delete>
+</mapper>
