@@ -68,6 +68,9 @@ public class IngredientService {
      * @return 新建 id
      */
     public Long createAndReturnId(Ingredient ingredient) {
+        if (ingredientMapper.countByName(ingredient.getName()) > 0) {
+            throw new BizException(10021, "食材名称已存在");
+        }
         ingredientMapper.insert(ingredient);
         return ingredient.getId();
     }

@@ -62,6 +62,7 @@
         LEFT JOIN dish_category dc ON dc.dish_id = d.id
         LEFT JOIN category c ON c.id = dc.category_id
         WHERE d.id = #{id}
+          AND d.is_deleted = 0
         ORDER BY dc.sort_order ASC, dc.category_id ASC
     </select>
 
@@ -77,6 +78,12 @@
         SELECT id, name, cover_url, steps, notes, duration_min, difficulty, status, remark, created_at, updated_at
         FROM dish
         WHERE is_deleted = 0
+        <if test="name != null and name != ''">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
         ORDER BY id DESC
         LIMIT #{limit} OFFSET #{offset}
     </select>
@@ -95,4 +102,37 @@
             (#{item.dishId}, #{item.ingredientId}, #{item.amountG}, #{item.sortOrder}, NULL)
         </foreach>
     </insert>
+
+    <update id="updateDishBase">
+        <!-- 更新菜品基础字段：动态更新，过滤软删 -->
+        UPDATE dish
+        <set>
+            <if test="req.name != null">name = #{req.name},</if>
+            <if test="req.coverUrl != null">cover_url = #{req.coverUrl},</if>
+            <if test="req.steps != null">steps = #{req.steps},</if>
+            <if test="req.notes != null">notes = #{req.notes},</if>
+            <if test="req.durationMin != null">duration_min = #{req.durationMin},</if>
+            <if test="req.difficulty != null">difficulty = #{req.difficulty},</if>
+            <if test="req.status != null">status = #{req.status},</if>
+            <if test="req.remark != null">remark = #{req.remark},</if>
+        </set>
+        WHERE id = #{id}
+          AND is_deleted = 0
+    </update>
+
+    <update id="updateDishStatus">
+        <!-- 更新菜品上下架状态：过滤软删 -->
+        UPDATE dish
+        SET status = #{status}
+        WHERE id = #{id}
+          AND is_deleted = 0
+    </update>
+
+    <update id="softDelete">
+        <!-- 软删除菜品：is_deleted=1 -->
+        UPDATE dish
+        SET is_deleted = 1
+        WHERE id = #{id}
+          AND is_deleted = 0
+    </update>
 </mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.PermissionPointMapper">
+    <resultMap id="PermissionPointMap" type="com.warmbitwes.menu.entity.PermissionPoint">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.warmbitwes.menu.entity.PermissionPoint">
+        INSERT INTO permission_point(code, name, remark)
+        VALUES (#{code}, #{name}, #{remark})
+    </insert>
+
+    <select id="selectByCode" resultMap="PermissionPointMap">
+        SELECT id, code, name, remark, created_at, updated_at
+        FROM permission_point
+        WHERE code = #{code}
+    </select>
+
+    <select id="selectAll" resultMap="PermissionPointMap">
+        SELECT id, code, name, remark, created_at, updated_at
+        FROM permission_point
+        ORDER BY id ASC
+    </select>
+</mapper>

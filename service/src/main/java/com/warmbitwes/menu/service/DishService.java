@@ -4,6 +4,7 @@ import com.warmbitwes.menu.entity.Dish;
 import com.warmbitwes.menu.entity.DishDetail;
 import com.warmbitwes.menu.entity.DishIngredient;
 import com.warmbitwes.menu.entity.Ingredient;
+import com.warmbitwes.menu.dto.DishUpdateReq;
 import com.warmbitwes.menu.exception.BizException;
 import com.warmbitwes.menu.mapper.DishMapper;
 import com.warmbitwes.menu.mapper.IngredientMapper;
@@ -59,11 +60,11 @@ public class DishService {
      * @param pageSize 每页大小（最大100）
      * @return 列表
      */
-    public List<Dish> listPage(int pageNum, int pageSize) {
+    public List<Dish> listPage(String name, Integer status, int pageNum, int pageSize) {
         int safePageNum = Math.max(1, pageNum);
         int safePageSize = Math.min(100, Math.max(1, pageSize));
         int offset = (safePageNum - 1) * safePageSize;
-        return dishMapper.selectPage(offset, safePageSize);
+        return dishMapper.selectPage(name, status, offset, safePageSize);
     }
 
     /**
@@ -88,6 +89,44 @@ public class DishService {
         dishMapper.deleteIngredientsByDishId(dishId);
         if (!items.isEmpty()) {
             dishMapper.batchInsertDishIngredients(items);
+        }
+    }
+
+    /**
+     * 更新菜品基础信息（过滤软删）。
+     *
+     * @param id 菜品ID
+     * @param req 更新请求
+     */
+    public void updateBase(Long id, DishUpdateReq req) {
+        int affected = dishMapper.updateDishBase(id, req);
+        if (affected <= 0) {
+            throw new BizException(40402, "菜品不存在或已删除，id=" + id);
+        }
+    }
+
+    /**
+     * 更新菜品上下架状态（过滤软删）。
+     *
+     * @param id 菜品ID
+     * @param status 状态：1上架 0下架
+     */
+    public void updateStatus(Long id, Integer status) {
+        int affected = dishMapper.updateDishStatus(id, status);
+        if (affected <= 0) {
+            throw new BizException(40402, "菜品不存在或已删除，id=" + id);
+        }
+    }
+
+    /**
+     * 软删除菜品（is_deleted=1）。
+     *
+     * @param id 菜品ID
+     */
+    public void softDelete(Long id) {
+        int affected = dishMapper.softDelete(id);
+        if (affected <= 0) {
+            throw new BizException(40402, "菜品不存在或已删除，id=" + id);
         }
     }
 }

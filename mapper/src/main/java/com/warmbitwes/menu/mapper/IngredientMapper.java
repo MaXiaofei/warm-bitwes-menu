@@ -55,4 +55,12 @@ public interface IngredientMapper {
      * @return 影响行数
      */
     int deleteById(@Param("id") Long id);
+
+    /**
+     * 按名称查询数量。
+     *
+     * @param name 名称
+     * @return 数量
+     */
+    int countByName(@Param("name") String name);
 }

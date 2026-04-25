@@ -15,30 +15,30 @@ SET NAMES utf8mb4;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS prep_item;
-DROP TABLE IF EXISTS session_review;
-DROP TABLE IF EXISTS session_retrospective;
-DROP TABLE IF EXISTS cook_event;
-DROP TABLE IF EXISTS session_dish;
-DROP TABLE IF EXISTS dish_ingredient;
-DROP TABLE IF EXISTS dish_category;
-DROP TABLE IF EXISTS dish_tag;
-DROP TABLE IF EXISTS dish_cuisine;
+-- DROP TABLE IF EXISTS prep_item;
+-- DROP TABLE IF EXISTS session_review;
+-- DROP TABLE IF EXISTS session_retrospective;
+-- DROP TABLE IF EXISTS cook_event;
+-- DROP TABLE IF EXISTS session_dish;
+-- DROP TABLE IF EXISTS dish_ingredient;
+-- DROP TABLE IF EXISTS dish_category;
+-- DROP TABLE IF EXISTS dish_tag;
+-- DROP TABLE IF EXISTS dish_cuisine;
 
-DROP TABLE IF EXISTS menu_template_dish;
-DROP TABLE IF EXISTS cooking_session;
+-- DROP TABLE IF EXISTS menu_template_dish;
+-- DROP TABLE IF EXISTS cooking_session;
 
-DROP TABLE IF EXISTS menu_template;
-DROP TABLE IF EXISTS dish;
-DROP TABLE IF EXISTS ingredient;
+-- DROP TABLE IF EXISTS menu_template;
+-- DROP TABLE IF EXISTS dish;
+-- DROP TABLE IF EXISTS ingredient;
 
-DROP TABLE IF EXISTS user_role;
-DROP TABLE IF EXISTS app_user;
-DROP TABLE IF EXISTS role;
+-- DROP TABLE IF EXISTS user_role;
+-- DROP TABLE IF EXISTS app_user;
+-- DROP TABLE IF EXISTS role;
 
-DROP TABLE IF EXISTS cuisine;
-DROP TABLE IF EXISTS tag;
-DROP TABLE IF EXISTS category;
+-- DROP TABLE IF EXISTS cuisine;
+-- DROP TABLE IF EXISTS tag;
+-- DROP TABLE IF EXISTS category;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -86,6 +86,43 @@ CREATE TABLE user_role (
   CONSTRAINT fk_user_role_user FOREIGN KEY (user_id) REFERENCES app_user (id),
   CONSTRAINT fk_user_role_role FOREIGN KEY (role_id) REFERENCES role (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户-角色关联';
+
+-- ----------------------------
+-- permission_point / role_permission / role_scope
+-- ----------------------------
+CREATE TABLE permission_point (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '权限点ID',
+  code VARCHAR(64) NOT NULL COMMENT '权限编码',
+  name VARCHAR(128) NOT NULL COMMENT '权限名称',
+  remark VARCHAR(512) DEFAULT NULL COMMENT '备注',
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '更新时间',
+  UNIQUE KEY uk_permission_point_code (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='权限点';
+
+CREATE TABLE role_permission (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
+  role_id BIGINT NOT NULL COMMENT '角色ID',
+  permission_id BIGINT NOT NULL COMMENT '权限点ID',
+  remark VARCHAR(512) DEFAULT NULL COMMENT '备注',
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '更新时间',
+  UNIQUE KEY uk_role_permission (role_id, permission_id),
+  KEY idx_role_permission_permission_id (permission_id),
+  CONSTRAINT fk_role_permission_role FOREIGN KEY (role_id) REFERENCES role (id),
+  CONSTRAINT fk_role_permission_permission FOREIGN KEY (permission_id) REFERENCES permission_point (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色-权限点';
+
+CREATE TABLE role_scope (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
+  role_id BIGINT NOT NULL COMMENT '角色ID',
+  client_type VARCHAR(32) NOT NULL COMMENT '端类型：admin/mini',
+  remark VARCHAR(512) DEFAULT NULL COMMENT '备注',
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '更新时间',
+  UNIQUE KEY uk_role_scope (role_id, client_type),
+  CONSTRAINT fk_role_scope_role FOREIGN KEY (role_id) REFERENCES role (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色-端范围';
 
 
 -- ----------------------------

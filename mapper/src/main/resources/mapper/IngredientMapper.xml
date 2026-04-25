@@ -60,4 +60,10 @@
         <!-- 按主键删除食材（物理删除，V1 可用于联调；后续可改软删） -->
         DELETE FROM ingredient WHERE id = #{id}
     </delete>
+
+    <select id="countByName" resultType="int">
+        SELECT COUNT(1)
+        FROM ingredient
+        WHERE name = #{name}
+    </select>
 </mapper>

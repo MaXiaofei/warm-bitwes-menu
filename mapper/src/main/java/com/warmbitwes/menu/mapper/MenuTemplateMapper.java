@@ -30,6 +30,15 @@ public interface MenuTemplateMapper {
     int batchInsertTemplateDishes(@Param("items") List<MenuTemplateDish> items);
 
     /**
+     * 模板分页查询（按创建时间倒序）。
+     *
+     * @param offset 偏移量（从0开始）
+     * @param limit 每页大小
+     * @return 模板列表
+     */
+    List<MenuTemplate> selectPage(@Param("offset") int offset, @Param("limit") int limit);
+
+    /**
      * 按 ID 查询模板。
      *
      * @param id 模板ID

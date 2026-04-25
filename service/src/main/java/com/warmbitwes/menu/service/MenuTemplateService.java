@@ -110,5 +110,19 @@ public class MenuTemplateService {
         }
         return result;
     }
+
+    /**
+     * 模板分页列表。
+     *
+     * @param pageNum 页码（从1开始）
+     * @param pageSize 每页大小（最大100）
+     * @return 模板列表
+     */
+    public List<MenuTemplate> listPage(int pageNum, int pageSize) {
+        int safePageNum = Math.max(1, pageNum);
+        int safePageSize = Math.min(100, Math.max(1, pageSize));
+        int offset = (safePageNum - 1) * safePageSize;
+        return menuTemplateMapper.selectPage(offset, safePageSize);
+    }
 }
 

@@ -3,6 +3,24 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.warmbitwes.menu.mapper.AppUserMapper">
+    <resultMap id="AppUserMap" type="com.warmbitwes.menu.entity.AppUser">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="passwordHash" column="password_hash"/>
+        <result property="nickname" column="nickname"/>
+        <result property="phone" column="phone"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectByUsername" resultMap="AppUserMap">
+        SELECT id, username, password_hash, nickname, phone, status, remark, created_at, updated_at
+        FROM app_user
+        WHERE username = #{username}
+        LIMIT 1
+    </select>
 
     <select id="selectAnyUserId" resultType="long">
         <!-- 查询任意一个用户ID（用于联调兜底） -->

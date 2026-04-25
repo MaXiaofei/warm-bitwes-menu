@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.RoleMapper">
+    <resultMap id="RoleMap" type="com.warmbitwes.menu.entity.Role">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="RoleMap">
+        SELECT id, name, remark, created_at, updated_at
+        FROM role
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserId" resultMap="RoleMap">
+        SELECT r.id, r.name, r.remark, r.created_at, r.updated_at
+        FROM role r
+                 INNER JOIN user_role ur ON ur.role_id = r.id
+        WHERE ur.user_id = #{userId}
+        ORDER BY r.id ASC
+    </select>
+</mapper>

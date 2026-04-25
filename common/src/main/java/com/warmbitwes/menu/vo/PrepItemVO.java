@@ -5,14 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 模板食材汇总视图。
+ * 备菜项视图。
  */
 @Data
 @NoArgsConstructor
-public class MenuTemplateIngredientSummaryVO {
+public class PrepItemVO {
     private Long ingredientId;
     private String ingredientName;
     private String unit;
-    private BigDecimal totalAmountG;
+    private BigDecimal planAmountG;
+    private Integer status;
+    private Integer isShortage;
 }
-

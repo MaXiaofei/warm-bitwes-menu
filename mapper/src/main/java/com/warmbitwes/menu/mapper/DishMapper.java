@@ -3,6 +3,7 @@ package com.warmbitwes.menu.mapper;
 import com.warmbitwes.menu.entity.Dish;
 import com.warmbitwes.menu.entity.DishDetail;
 import com.warmbitwes.menu.entity.DishIngredient;
+import com.warmbitwes.menu.dto.DishUpdateReq;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,7 +34,10 @@ public interface DishMapper {
      * @param limit 每页大小
      * @return 列表
      */
-    List<Dish> selectPage(@Param("offset") int offset, @Param("limit") int limit);
+    List<Dish> selectPage(@Param("name") String name,
+                          @Param("status") Integer status,
+                          @Param("offset") int offset,
+                          @Param("limit") int limit);
 
     /**
      * 删除指定菜品的全部食材关联。
@@ -50,4 +54,30 @@ public interface DishMapper {
      * @return 影响行数
      */
     int batchInsertDishIngredients(@Param("items") List<DishIngredient> items);
+
+    /**
+     * 更新菜品基础字段（动态更新，过滤软删）。
+     *
+     * @param id 菜品ID
+     * @param req 更新请求
+     * @return 影响行数
+     */
+    int updateDishBase(@Param("id") Long id, @Param("req") DishUpdateReq req);
+
+    /**
+     * 更新菜品上下架状态（过滤软删）。
+     *
+     * @param id 菜品ID
+     * @param status 状态：1上架 0下架
+     * @return 影响行数
+     */
+    int updateDishStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    /**
+     * 软删除菜品（is_deleted=1）。
+     *
+     * @param id 菜品ID
+     * @return 影响行数
+     */
+    int softDelete(@Param("id") Long id);
 }

@@ -35,6 +35,14 @@
         </foreach>
     </insert>
 
+    <select id="selectPage" resultMap="MenuTemplateMap">
+        <!-- 模板分页查询：按创建时间倒序 -->
+        SELECT id, name, template_type, scene, flavor, crowd, description, status, created_by, remark, created_at, updated_at
+        FROM menu_template
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
     <select id="selectById" parameterType="long" resultMap="MenuTemplateMap">
         <!-- 按主键查询菜单模板 -->
         SELECT id, name, template_type, scene, flavor, crowd, description, status, created_by, remark, created_at, updated_at
