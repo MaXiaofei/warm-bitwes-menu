@@ -17,6 +17,24 @@
         WHERE id = #{id}
     </select>
 
+    <insert id="insert" parameterType="com.warmbitwes.menu.entity.Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO role(name, remark)
+        VALUES (#{name}, #{remark})
+    </insert>
+
+    <update id="updateById" parameterType="com.warmbitwes.menu.entity.Role">
+        UPDATE role
+        SET name = #{name},
+            remark = #{remark}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectAll" resultMap="RoleMap">
+        SELECT id, name, remark, created_at, updated_at
+        FROM role
+        ORDER BY id DESC
+    </select>
+
     <select id="selectByUserId" resultMap="RoleMap">
         SELECT r.id, r.name, r.remark, r.created_at, r.updated_at
         FROM role r
@@ -24,4 +42,34 @@
         WHERE ur.user_id = #{userId}
         ORDER BY r.id ASC
     </select>
+
+    <delete id="deleteRolePermissions">
+        DELETE FROM role_permission
+        WHERE role_id = #{roleId}
+    </delete>
+
+    <insert id="batchInsertRolePermissions">
+        INSERT INTO role_permission(role_id, permission_id)
+        VALUES
+        <foreach collection="permissionIds" item="permissionId" separator=",">
+            (#{roleId}, #{permissionId})
+        </foreach>
+    </insert>
+
+    <select id="selectClientTypesByRoleId" resultType="string">
+        SELECT client_type
+        FROM role_scope
+        WHERE role_id = #{roleId}
+        ORDER BY id ASC
+    </select>
+
+    <delete id="deleteRoleScopes">
+        DELETE FROM role_scope
+        WHERE role_id = #{roleId}
+    </delete>
+
+    <insert id="insertRoleScope">
+        INSERT INTO role_scope(role_id, client_type)
+        VALUES (#{roleId}, #{clientType})
+    </insert>
 </mapper>

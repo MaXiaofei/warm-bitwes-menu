@@ -43,5 +43,31 @@
         INSERT INTO app_user(username, password_hash, nickname, status, remark)
         VALUES (#{username}, 'dev_password_hash', '联调用户', 1, '自动创建用于联调')
     </insert>
+
+    <select id="selectAdminUsers" resultMap="AppUserMap">
+        SELECT id, username, password_hash, nickname, phone, status, remark, created_at, updated_at
+        FROM app_user
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insertAdminUser" parameterType="com.warmbitwes.menu.entity.AppUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO app_user(username, password_hash, nickname, phone, status, remark)
+        VALUES (#{username}, #{passwordHash}, #{nickname}, #{phone}, #{status}, #{remark})
+    </insert>
+
+    <update id="updateAdminUserById" parameterType="com.warmbitwes.menu.entity.AppUser">
+        UPDATE app_user
+        SET nickname = #{nickname},
+            phone = #{phone},
+            status = #{status},
+            remark = #{remark}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updatePasswordById">
+        UPDATE app_user
+        SET password_hash = #{passwordHash}
+        WHERE id = #{id}
+    </update>
 </mapper>
 
