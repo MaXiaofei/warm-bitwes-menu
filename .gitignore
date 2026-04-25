@@ -32,3 +32,6 @@ replay_pid*
 # Git worktrees + superpowers brainstorming artifacts
 .worktrees/
 .superpowers/
+
+# Maven build outputs
+**/target/
