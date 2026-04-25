@@ -28,3 +28,7 @@ replay_pid*
 
 # IntelliJ IDEA
 .idea/
+
+# Git worktrees + superpowers brainstorming artifacts
+.worktrees/
+.superpowers/
