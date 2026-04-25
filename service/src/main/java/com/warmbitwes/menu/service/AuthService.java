@@ -44,7 +44,13 @@ public class AuthService {
         Set<String> permissions = new HashSet<>();
         permissions.add("auth-user:list");
         permissions.add("auth-user:create");
+        permissions.add("auth-user:update");
+        permissions.add("auth-user:reset-password");
+        permissions.add("auth-role:list");
         permissions.add("auth-role:grant");
+        permissions.add("auth-permission:list");
+        permissions.add("auth-scope:list");
+        permissions.add("auth-scope:update");
         permissions.add("dish:view");
         permissions.add("ingredient:view");
         return permissions;

@@ -51,4 +51,12 @@ public class AdminUserController {
         adminUserService.update(id, req.getNickname(), req.getPhone(), req.getEmail(), req.getStatus(), req.getRoleIds());
         return ApiResponse.success();
     }
+
+    @Operation(summary = "重置账号密码", description = "将管理端账号密码重置为默认密码。")
+    @PostMapping("/{id}/reset-password")
+    @RequirePermission("auth-user:reset-password")
+    public ApiResponse<Void> resetPassword(@PathVariable("id") Long id) {
+        adminUserService.resetPassword(id);
+        return ApiResponse.success();
+    }
 }

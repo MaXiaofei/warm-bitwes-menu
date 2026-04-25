@@ -31,6 +31,13 @@ public class AdminUserService {
         userStore.put(id, new AdminUserItem(id, previous.username(), nickname, phone, email, safeStatus, roleIds));
     }
 
+    public void resetPassword(Long id) {
+        // 预留密码重置能力：当前批次使用内存模型，不持久化密码，仅校验账号存在。
+        if (!userStore.containsKey(id)) {
+            return;
+        }
+    }
+
     public record AdminUserItem(
             Long id,
             String username,

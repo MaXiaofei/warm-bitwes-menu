@@ -48,10 +48,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private void validateClientScope(String requestUri, LoginUser loginUser) {
         String clientType = loginUser.getClientType();
-        if (requestUri != null && requestUri.startsWith("/api/admin") && !"admin".equals(clientType)) {
+        if (requestUri != null && requestUri.contains("/api/admin") && !"admin".equals(clientType)) {
             throw new BizException(10003, "无权限访问");
         }
-        if (requestUri != null && requestUri.startsWith("/api/mini") && !"mini".equals(clientType)) {
+        if (requestUri != null && requestUri.contains("/api/mini") && !"mini".equals(clientType)) {
             throw new BizException(10003, "无权限访问");
         }
     }

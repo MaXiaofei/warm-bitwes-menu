@@ -7,6 +7,8 @@ import com.warmbitwes.menu.service.AdminRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,13 @@ public class AdminScopeController {
 
     public AdminScopeController(AdminRoleService adminRoleService) {
         this.adminRoleService = adminRoleService;
+    }
+
+    @Operation(summary = "查询角色端范围", description = "按角色查询可访问端范围。")
+    @GetMapping("/{roleId}")
+    @RequirePermission("auth-scope:list")
+    public ApiResponse<List<String>> getRoleScope(@PathVariable("roleId") Long roleId) {
+        return ApiResponse.success(adminRoleService.getScopes(roleId));
     }
 
     @Operation(summary = "更新角色端范围", description = "更新角色可访问的 clientType 列表。")

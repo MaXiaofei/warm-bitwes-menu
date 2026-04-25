@@ -26,4 +26,17 @@ public class AdminRoleService {
     public void updateScope(Long roleId, List<String> clientTypes) {
         roleScopeStore.put(roleId, clientTypes);
     }
+
+    public List<AdminRoleItem> list() {
+        return roleStore.entrySet().stream()
+                .map(entry -> new AdminRoleItem(entry.getKey(), entry.getValue(), "系统角色"))
+                .toList();
+    }
+
+    public List<String> getScopes(Long roleId) {
+        return roleScopeStore.getOrDefault(roleId, List.of("admin"));
+    }
+
+    public record AdminRoleItem(Long id, String name, String remark) {
+    }
 }
