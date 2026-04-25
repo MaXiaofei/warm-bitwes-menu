@@ -47,6 +47,7 @@ public class AuthService {
         permissions.add("auth-user:update");
         permissions.add("auth-user:reset-password");
         permissions.add("auth-role:list");
+        permissions.add("auth-role:update");
         permissions.add("auth-role:grant");
         permissions.add("auth-permission:list");
         permissions.add("auth-scope:list");

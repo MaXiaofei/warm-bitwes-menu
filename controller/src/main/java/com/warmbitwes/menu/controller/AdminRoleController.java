@@ -41,8 +41,16 @@ public class AdminRoleController {
     @PostMapping
     @RequirePermission("auth-role:create")
     public ApiResponse<IdResp> create(@RequestBody @Valid AdminRoleCreateReq req) {
-        Long id = adminRoleService.create(req.getName());
+        Long id = adminRoleService.create(req.getName(), req.getRemark());
         return ApiResponse.success(new IdResp(id));
+    }
+
+    @Operation(summary = "更新角色", description = "更新管理端角色名称与备注。")
+    @PutMapping("/{id}")
+    @RequirePermission("auth-role:update")
+    public ApiResponse<Void> update(@PathVariable("id") Long id, @RequestBody @Valid AdminRoleCreateReq req) {
+        adminRoleService.update(id, req.getName(), req.getRemark());
+        return ApiResponse.success();
     }
 
     @Operation(summary = "角色绑定权限", description = "为角色更新权限点集合。")

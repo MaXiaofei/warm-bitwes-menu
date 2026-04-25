@@ -10,11 +10,12 @@ public class AdminPermissionService {
                 new PermissionPointItem(1L, "auth-user:list", "账号列表"),
                 new PermissionPointItem(2L, "auth-user:create", "新增账号"),
                 new PermissionPointItem(3L, "auth-role:list", "角色列表"),
-                new PermissionPointItem(4L, "auth-role:grant", "角色授权"),
-                new PermissionPointItem(5L, "auth-permission:list", "权限点列表"),
-                new PermissionPointItem(6L, "auth-scope:list", "端范围列表"),
-                new PermissionPointItem(7L, "dish:list", "菜品列表"),
-                new PermissionPointItem(8L, "ingredient:list", "食材列表")
+                new PermissionPointItem(4L, "auth-role:update", "编辑角色"),
+                new PermissionPointItem(5L, "auth-role:grant", "角色授权"),
+                new PermissionPointItem(6L, "auth-permission:list", "权限点列表"),
+                new PermissionPointItem(7L, "auth-scope:list", "端范围列表"),
+                new PermissionPointItem(8L, "dish:list", "菜品列表"),
+                new PermissionPointItem(9L, "ingredient:list", "食材列表")
         );
     }
 

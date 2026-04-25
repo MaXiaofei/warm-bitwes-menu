@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminRoleService {
     private final AtomicLong idGenerator = new AtomicLong(1);
-    private final Map<Long, String> roleStore = new HashMap<>();
+    private final Map<Long, AdminRoleItem> roleStore = new HashMap<>();
     private final Map<Long, List<Long>> rolePermissionStore = new HashMap<>();
     private final Map<Long, List<String>> roleScopeStore = new HashMap<>();
 
-    public Long create(String name) {
+    public Long create(String name, String remark) {
         long id = idGenerator.getAndIncrement();
-        roleStore.put(id, name);
+        roleStore.put(id, new AdminRoleItem(id, name, remark));
         return id;
     }
 
@@ -28,9 +28,15 @@ public class AdminRoleService {
     }
 
     public List<AdminRoleItem> list() {
-        return roleStore.entrySet().stream()
-                .map(entry -> new AdminRoleItem(entry.getKey(), entry.getValue(), "系统角色"))
-                .toList();
+        return roleStore.values().stream().toList();
+    }
+
+    public void update(Long id, String name, String remark) {
+        AdminRoleItem previous = roleStore.get(id);
+        if (previous == null) {
+            return;
+        }
+        roleStore.put(id, new AdminRoleItem(id, name, remark));
     }
 
     public List<String> getScopes(Long roleId) {
