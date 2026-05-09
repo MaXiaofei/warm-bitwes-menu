@@ -1,0 +1,824 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "hermes-agent",
+  "elements": [
+    {
+      "type": "rectangle",
+      "id": "bg",
+      "x": 0,
+      "y": 0,
+      "width": 1200,
+      "height": 800,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#f8f9fa",
+      "roughness": 1,
+      "opacity": 100,
+      "width": 1200,
+      "height": 800
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "x": 500,
+      "y": 30,
+      "width": 200,
+      "height": 40,
+      "text": "烟火小食单系统架构",
+      "fontSize": 28,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "originalText": "烟火小食单系统架构",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "backend",
+      "x": 50,
+      "y": 100,
+      "width": 300,
+      "height": 200,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#a5d8ff",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_backend",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_backend",
+      "x": 55,
+      "y": 110,
+      "width": 290,
+      "height": 30,
+      "text": "后端 (menu)",
+      "fontSize": 20,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "backend",
+      "originalText": "后端 (menu)",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_backend_tech",
+      "x": 55,
+      "y": 150,
+      "width": 290,
+      "height": 40,
+      "text": "Spring Boot 3.2.12\nMyBatis + Java 17",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "backend",
+      "originalText": "Spring Boot 3.2.12\nMyBatis + Java 17",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "admin",
+      "x": 450,
+      "y": 100,
+      "width": 300,
+      "height": 200,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#ffd8a8",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_admin",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_admin",
+      "x": 455,
+      "y": 110,
+      "width": 290,
+      "height": 30,
+      "text": "管理后台 (menu-admin)",
+      "fontSize": 20,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "admin",
+      "originalText": "管理后台 (menu-admin)",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_admin_tech",
+      "x": 455,
+      "y": 150,
+      "width": 290,
+      "height": 40,
+      "text": "Vue3 + 暖色调UI\n业务优先架构",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "admin",
+      "originalText": "Vue3 + 暖色调UI\n业务优先架构",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "mini",
+      "x": 850,
+      "y": 100,
+      "width": 300,
+      "height": 200,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#d0bfff",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_mini",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_mini",
+      "x": 855,
+      "y": 110,
+      "width": 290,
+      "height": 30,
+      "text": "小程序 (menu-mini)",
+      "fontSize": 20,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "mini",
+      "originalText": "小程序 (menu-mini)",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_mini_tech",
+      "x": 855,
+      "y": 150,
+      "width": 290,
+      "height": 40,
+      "text": "uni-app\n登录态 + 只读浏览",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "mini",
+      "originalText": "uni-app\n登录态 + 只读浏览",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "auth",
+      "x": 50,
+      "y": 350,
+      "width": 200,
+      "height": 120,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#b2f2bb",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_auth",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_auth",
+      "x": 55,
+      "y": 360,
+      "width": 190,
+      "height": 25,
+      "text": "AUTH",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "auth",
+      "originalText": "AUTH",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_auth_features",
+      "x": 55,
+      "y": 390,
+      "width": 190,
+      "height": 70,
+      "text": "账号管理\n角色管理\n权限配置\n端权限范围",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "auth",
+      "originalText": "账号管理\n角色管理\n权限配置\n端权限范围",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "dish",
+      "x": 300,
+      "y": 350,
+      "width": 200,
+      "height": 120,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#b2f2bb",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_dish",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_dish",
+      "x": 305,
+      "y": 360,
+      "width": 190,
+      "height": 25,
+      "text": "DISH",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "dish",
+      "originalText": "DISH",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_dish_features",
+      "x": 305,
+      "y": 390,
+      "width": 190,
+      "height": 70,
+      "text": "菜品管理\nCRUD操作\n状态管理\n分类体系",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "dish",
+      "originalText": "菜品管理\nCRUD操作\n状态管理\n分类体系",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "ingr",
+      "x": 550,
+      "y": 350,
+      "width": 200,
+      "height": 120,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#b2f2bb",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_ingr",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_ingr",
+      "x": 555,
+      "y": 360,
+      "width": 190,
+      "height": 25,
+      "text": "INGR",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "ingr",
+      "originalText": "INGR",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_ingr_features",
+      "x": 555,
+      "y": 390,
+      "width": 190,
+      "height": 70,
+      "text": "食材管理\n营养信息\n单位管理\n热量计算",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "ingr",
+      "originalText": "食材管理\n营养信息\n单位管理\n热量计算",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "database",
+      "x": 300,
+      "y": 520,
+      "width": 200,
+      "height": 100,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#c3fae8",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_database",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_database",
+      "x": 305,
+      "y": 530,
+      "width": 190,
+      "height": 25,
+      "text": "MySQL",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "database",
+      "originalText": "MySQL",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_database_features",
+      "x": 305,
+      "y": 560,
+      "width": 190,
+      "height": 50,
+      "text": "用户数据\n菜品数据\n食材数据\n权限数据",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "database",
+      "originalText": "用户数据\n菜品数据\n食材数据\n权限数据",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "security",
+      "x": 50,
+      "y": 520,
+      "width": 200,
+      "height": 100,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#ffc9c9",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_security",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_security",
+      "x": 55,
+      "y": 530,
+      "width": 190,
+      "height": 25,
+      "text": "安全机制",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "security",
+      "originalText": "安全机制",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_security_features",
+      "x": 55,
+      "y": 560,
+      "width": 190,
+      "height": 50,
+      "text": "Token认证\n权限校验\n越权拒绝\n端范围控制",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "security",
+      "originalText": "Token认证\n权限校验\n越权拒绝\n端范围控制",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "api",
+      "x": 800,
+      "y": 350,
+      "width": 200,
+      "height": 120,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#fff3bf",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_api",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_api",
+      "x": 805,
+      "y": 360,
+      "width": 190,
+      "height": 25,
+      "text": "API 规范",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "api",
+      "originalText": "API 规范",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_api_features",
+      "x": 805,
+      "y": 390,
+      "width": 190,
+      "height": 70,
+      "text": "统一响应格式\ncode/message/data\nRESTful设计\n版本控制",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "api",
+      "originalText": "统一响应格式\ncode/message/data\nRESTful设计\n版本控制",
+      "autoResize": true
+    },
+    {
+      "type": "arrow",
+      "id": "arrow1",
+      "x": 200,
+      "y": 300,
+      "width": 0,
+      "height": 50,
+      "points": [[0,0],[0,50]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "backend",
+        "fixedPoint": [0.5, 1]
+      },
+      "endBinding": {
+        "elementId": "auth",
+        "fixedPoint": [0.5, 0]
+      }
+    },
+    {
+      "type": "arrow",
+      "id": "arrow2",
+      "x": 200,
+      "y": 300,
+      "width": 100,
+      "height": 50,
+      "points": [[0,0],[100,0]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "backend",
+        "fixedPoint": [0.5, 1]
+      },
+      "endBinding": {
+        "elementId": "dish",
+        "fixedPoint": [0, 0.5]
+      }
+    },
+    {
+      "type": "arrow",
+      "id": "arrow3",
+      "x": 350,
+      "y": 300,
+      "width": 200,
+      "height": 50,
+      "points": [[0,0],[200,0]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "backend",
+        "fixedPoint": [0.5, 1]
+      },
+      "endBinding": {
+        "elementId": "ingr",
+        "fixedPoint": [0, 0.5]
+      }
+    },
+    {
+      "type": "arrow",
+      "id": "arrow4",
+      "x": 200,
+      "y": 470,
+      "width": 100,
+      "height": 50,
+      "points": [[0,0],[100,0]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "auth",
+        "fixedPoint": [0.5, 1]
+      },
+      "endBinding": {
+        "elementId": "database",
+        "fixedPoint": [0, 0.5]
+      }
+    },
+    {
+      "type": "arrow",
+      "id": "arrow5",
+      "x": 400,
+      "y": 470,
+      "width": 0,
+      "height": 50,
+      "points": [[0,0],[0,50]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "dish",
+        "fixedPoint": [0.5, 1]
+      },
+      "endBinding": {
+        "elementId": "database",
+        "fixedPoint": [0.5, 0]
+      }
+    },
+    {
+      "type": "arrow",
+      "id": "arrow6",
+      "x": 650,
+      "y": 470,
+      "width": -150,
+      "height": 50,
+      "points": [[0,0],[-150,0]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "ingr",
+        "fixedPoint": [0.5, 1]
+      },
+      "endBinding": {
+        "elementId": "database",
+        "fixedPoint": [1, 0.5]
+      }
+    },
+    {
+      "type": "arrow",
+      "id": "arrow7",
+      "x": 150,
+      "y": 470,
+      "width": 0,
+      "height": 50,
+      "points": [[0,0],[0,50]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "security",
+        "fixedPoint": [0.5, 1]
+      },
+      "endBinding": {
+        "elementId": "database",
+        "fixedPoint": [0.5, 0]
+      }
+    },
+    {
+      "type": "arrow",
+      "id": "arrow8",
+      "x": 400,
+      "y": 200,
+      "width": 50,
+      "height": 0,
+      "points": [[0,0],[50,0]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "backend",
+        "fixedPoint": [1, 0.5]
+      },
+      "endBinding": null
+    },
+    {
+      "type": "arrow",
+      "id": "arrow9",
+      "x": 800,
+      "y": 200,
+      "width": 50,
+      "height": 0,
+      "points": [[0,0],[50,0]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "admin",
+        "fixedPoint": [1, 0.5]
+      },
+      "endBinding": null
+    },
+    {
+      "type": "arrow",
+      "id": "arrow10",
+      "x": 1000,
+      "y": 200,
+      "width": 0,
+      "height": 0,
+      "points": [[0,0],[0,0]],
+      "strokeColor": "#1e1e1e",
+      "endArrowhead": "arrow",
+      "startBinding": {
+        "elementId": "mini",
+        "fixedPoint": [0, 0.5]
+      },
+      "endBinding": null
+    },
+    {
+      "type": "text",
+      "id": "t_api_label",
+      "x": 420,
+      "y": 180,
+      "width": 80,
+      "height": 20,
+      "text": "REST API",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "originalText": "REST API",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_api_label2",
+      "x": 820,
+      "y": 180,
+      "width": 80,
+      "height": 20,
+      "text": "REST API",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "originalText": "REST API",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_api_label3",
+      "x": 1020,
+      "y": 180,
+      "width": 80,
+      "height": 20,
+      "text": "REST API",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "originalText": "REST API",
+      "autoResize": true
+    },
+    {
+      "type": "rectangle",
+      "id": "scope",
+      "x": 50,
+      "y": 670,
+      "width": 1100,
+      "height": 100,
+      "fillStyle": "solid",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#fff3bf",
+      "roughness": 1,
+      "opacity": 100,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "t_scope",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "t_scope",
+      "x": 55,
+      "y": 680,
+      "width": 1090,
+      "height": 30,
+      "text": "Batch 1 范围",
+      "fontSize": 20,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "scope",
+      "originalText": "Batch 1 范围",
+      "autoResize": true
+    },
+    {
+      "type": "text",
+      "id": "t_scope_content",
+      "x": 55,
+      "y": 720,
+      "width": 1090,
+      "height": 40,
+      "text": "AUTH + DISH + INGR | 管理后台：主数据管理 + 权限配置 | 小程序：登录态 + 只读浏览",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "strokeColor": "#1e1e1e",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "scope",
+      "originalText": "AUTH + DISH + INGR | 管理后台：主数据管理 + 权限配置 | 小程序：登录态 + 只读浏览",
+      "autoResize": true
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#f8f9fa"
+  }
+}

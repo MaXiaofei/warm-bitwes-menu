@@ -48,6 +48,14 @@ public interface DishMapper {
     int deleteIngredientsByDishId(@Param("dishId") Long dishId);
 
     /**
+     * 查询菜品食材关联列表。
+     *
+     * @param dishId 菜品ID
+     * @return 关联列表
+     */
+    List<DishIngredient> selectIngredientsByDishId(@Param("dishId") Long dishId);
+
+    /**
      * 批量新增菜品食材关联。
      *
      * @param items 关联项

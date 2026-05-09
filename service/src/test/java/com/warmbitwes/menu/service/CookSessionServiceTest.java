@@ -15,10 +15,12 @@ import com.warmbitwes.menu.entity.MenuTemplate;
 import com.warmbitwes.menu.entity.SessionDish;
 import com.warmbitwes.menu.exception.BizException;
 import com.warmbitwes.menu.mapper.AppUserMapper;
+import com.warmbitwes.menu.mapper.CookEventMapper;
 import com.warmbitwes.menu.mapper.CookingSessionMapper;
 import com.warmbitwes.menu.mapper.DishMapper;
 import com.warmbitwes.menu.mapper.MenuTemplateMapper;
 import com.warmbitwes.menu.mapper.P2Mapper;
+import com.warmbitwes.menu.mapper.SessionRetrospectiveMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,10 @@ class CookSessionServiceTest {
     private P2Mapper p2Mapper;
     @Mock
     private DishMapper dishMapper;
+    @Mock
+    private CookEventMapper cookEventMapper;
+    @Mock
+    private SessionRetrospectiveMapper sessionRetrospectiveMapper;
 
     @InjectMocks
     private CookSessionService cookSessionService;

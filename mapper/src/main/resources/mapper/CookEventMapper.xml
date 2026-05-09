@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.CookEventMapper">
+
+    <resultMap id="CookEventMap" type="com.warmbitwes.menu.entity.CookEvent">
+        <id property="id" column="id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="eventType" column="event_type"/>
+        <result property="eventTime" column="event_time"/>
+        <result property="content" column="content"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.warmbitwes.menu.entity.CookEvent" useGeneratedKeys="true" keyProperty="id">
+        <!-- 新增烹饪过程事件 -->
+        INSERT INTO cook_event(session_id, event_type, event_time, content, remark)
+        VALUES (#{sessionId}, #{eventType}, #{eventTime}, #{content}, #{remark})
+    </insert>
+
+    <select id="selectBySessionIdOrderByEventTimeAsc" resultMap="CookEventMap">
+        <!-- 按会话查询事件，时间升序 -->
+        SELECT id, session_id, event_type, event_time, content, remark, created_at, updated_at
+        FROM cook_event
+        WHERE session_id = #{sessionId}
+        ORDER BY event_time ASC, id ASC
+    </select>
+</mapper>

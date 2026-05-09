@@ -39,7 +39,23 @@ public class AuthService {
 
     private Set<String> buildPermissionsByClientType(String clientType) {
         if ("mini".equals(clientType)) {
-            return Set.of("dish:view", "ingredient:view");
+            return Set.of(
+                    "dropdown-option:list",
+                    "dish:view",
+                    "ingredient:view",
+                    "menu-template:list",
+                    "menu-template:detail",
+                    "menu-template:ingredient-summary",
+                    "cook-session:create",
+                    "cook-session:list-mine",
+                    "cook-session:event-read",
+                    "cook-session:event-write",
+                    "cook-session:retrospective-read",
+                    "cook-session:retrospective-write",
+                    "cook-session:prep-generate",
+                    "cook-session:review-taste",
+                    "cook-session:review-list"
+            );
         }
         Set<String> permissions = new HashSet<>();
         permissions.add("auth-user:list");
@@ -52,8 +68,26 @@ public class AuthService {
         permissions.add("auth-permission:list");
         permissions.add("auth-scope:list");
         permissions.add("auth-scope:update");
+        permissions.add("dropdown-option:list");
+        permissions.add("dropdown-option:create");
+        permissions.add("dropdown-option:update");
+        permissions.add("dropdown-option:delete");
         permissions.add("dish:view");
         permissions.add("ingredient:view");
+        permissions.add("menu-template:list");
+        permissions.add("menu-template:create");
+        permissions.add("menu-template:detail");
+        permissions.add("menu-template:update");
+        permissions.add("menu-template:ingredient-summary");
+        permissions.add("cook-session:create");
+        permissions.add("cook-session:list-mine");
+        permissions.add("cook-session:event-read");
+        permissions.add("cook-session:event-write");
+        permissions.add("cook-session:retrospective-read");
+        permissions.add("cook-session:retrospective-write");
+        permissions.add("cook-session:prep-generate");
+        permissions.add("cook-session:review-taste");
+        permissions.add("cook-session:review-list");
         return permissions;
     }
 }

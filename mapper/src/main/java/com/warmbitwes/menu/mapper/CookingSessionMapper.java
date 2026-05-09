@@ -1,6 +1,8 @@
 package com.warmbitwes.menu.mapper;
 
 import com.warmbitwes.menu.entity.CookingSession;
+import com.warmbitwes.menu.entity.CookingSessionMineRow;
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,5 +27,25 @@ public interface CookingSessionMapper {
      * @return 会话
      */
     CookingSession selectById(@Param("id") Long id);
+
+    /**
+     * 统计用户会话数量。
+     *
+     * @param userId 用户ID
+     * @return 数量
+     */
+    long countByUserId(@Param("userId") Long userId);
+
+    /**
+     * 分页查询用户会话摘要（含模板名）。
+     *
+     * @param userId 用户ID
+     * @param offset 偏移
+     * @param limit 条数
+     * @return 行列表
+     */
+    List<CookingSessionMineRow> selectMineByUserId(@Param("userId") Long userId,
+                                                   @Param("offset") int offset,
+                                                   @Param("limit") int limit);
 }
 

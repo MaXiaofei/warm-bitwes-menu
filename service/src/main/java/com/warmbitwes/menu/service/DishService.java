@@ -40,6 +40,17 @@ public class DishService {
     }
 
     /**
+     * 查询菜品食材关联列表。
+     *
+     * @param dishId 菜品ID
+     * @return 关联项
+     */
+    public List<DishIngredient> listIngredientsByDishId(Long dishId) {
+        getDetailById(dishId);
+        return dishMapper.selectIngredientsByDishId(dishId);
+    }
+
+    /**
      * 新增菜品。
      *
      * @param dish 菜品

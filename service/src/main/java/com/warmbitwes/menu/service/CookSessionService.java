@@ -1,18 +1,30 @@
 package com.warmbitwes.menu.service;
 
+import com.warmbitwes.menu.dto.CookEventCreateReq;
+import com.warmbitwes.menu.dto.SessionRetrospectiveUpsertReq;
+import com.warmbitwes.menu.entity.CookEvent;
 import com.warmbitwes.menu.entity.CookingSession;
+import com.warmbitwes.menu.entity.CookingSessionMineRow;
 import com.warmbitwes.menu.entity.DishDetail;
 import com.warmbitwes.menu.entity.MenuTemplate;
 import com.warmbitwes.menu.entity.PrepItem;
 import com.warmbitwes.menu.entity.SessionDish;
+import com.warmbitwes.menu.entity.SessionRetrospective;
 import com.warmbitwes.menu.entity.SessionReview;
 import com.warmbitwes.menu.exception.BizException;
 import com.warmbitwes.menu.mapper.AppUserMapper;
+import com.warmbitwes.menu.mapper.CookEventMapper;
 import com.warmbitwes.menu.mapper.CookingSessionMapper;
 import com.warmbitwes.menu.mapper.DishMapper;
 import com.warmbitwes.menu.mapper.MenuTemplateMapper;
 import com.warmbitwes.menu.mapper.P2Mapper;
+import com.warmbitwes.menu.mapper.SessionRetrospectiveMapper;
+import com.warmbitwes.menu.security.LoginUser;
+import com.warmbitwes.menu.security.SecurityContextHolder;
+import com.warmbitwes.menu.vo.CookEventVO;
+import com.warmbitwes.menu.vo.CookSessionMineItemVO;
 import com.warmbitwes.menu.vo.PrepItemVO;
+import com.warmbitwes.menu.vo.SessionRetrospectiveVO;
 import com.warmbitwes.menu.vo.SessionReviewVO;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,6 +32,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,19 +49,25 @@ public class CookSessionService {
     private final MenuTemplateMapper menuTemplateMapper;
     private final P2Mapper p2Mapper;
     private final DishMapper dishMapper;
+    private final CookEventMapper cookEventMapper;
+    private final SessionRetrospectiveMapper sessionRetrospectiveMapper;
 
     public CookSessionService(CookingSessionMapper cookingSessionMapper,
                               MenuTemplateService menuTemplateService,
                               AppUserMapper appUserMapper,
                               MenuTemplateMapper menuTemplateMapper,
                               P2Mapper p2Mapper,
-                              DishMapper dishMapper) {
+                              DishMapper dishMapper,
+                              CookEventMapper cookEventMapper,
+                              SessionRetrospectiveMapper sessionRetrospectiveMapper) {
         this.cookingSessionMapper = cookingSessionMapper;
         this.menuTemplateService = menuTemplateService;
         this.appUserMapper = appUserMapper;
         this.menuTemplateMapper = menuTemplateMapper;
         this.p2Mapper = p2Mapper;
         this.dishMapper = dishMapper;
+        this.cookEventMapper = cookEventMapper;
+        this.sessionRetrospectiveMapper = sessionRetrospectiveMapper;
     }
 
     /**
@@ -82,7 +101,7 @@ public class CookSessionService {
         MenuTemplate template = menuTemplateService.getById(templateId);
 
         CookingSession session = new CookingSession();
-        session.setUserId(resolveOrCreateDevUserId());
+        session.setUserId(resolveSessionUserId());
         session.setTemplateId(templateId);
         session.setScene(template.getScene());
         session.setFlavor(template.getFlavor());
@@ -103,7 +122,7 @@ public class CookSessionService {
         }
 
         CookingSession session = new CookingSession();
-        session.setUserId(resolveOrCreateDevUserId());
+        session.setUserId(resolveSessionUserId());
         session.setTemplateId(null);
         session.setScene(null);
         session.setFlavor(null);
@@ -228,6 +247,139 @@ public class CookSessionService {
             result.add(vo);
         }
         return result;
+    }
+
+    /**
+     * 分页查询当前登录用户的做饭会话。
+     *
+     * @param pageNum 页码（从1开始）
+     * @param pageSize 每页条数（最大100）
+     * @return 分页数据
+     */
+    public CookSessionMinePage listMineForCurrentUser(int pageNum, int pageSize) {
+        Long userId = requireUserId();
+        int safePageNum = Math.max(1, pageNum);
+        int safePageSize = Math.min(100, Math.max(1, pageSize));
+        int offset = (safePageNum - 1) * safePageSize;
+        long total = cookingSessionMapper.countByUserId(userId);
+        List<CookSessionMineItemVO> records = cookingSessionMapper.selectMineByUserId(userId, offset, safePageSize).stream()
+                .map(row -> {
+                    CookSessionMineItemVO vo = new CookSessionMineItemVO();
+                    vo.setId(row.getId());
+                    vo.setTemplateId(row.getTemplateId());
+                    vo.setTemplateName(row.getTemplateName());
+                    vo.setStartedAt(row.getStartedAt());
+                    vo.setStatus(row.getStatus());
+                    return vo;
+                })
+                .collect(Collectors.toList());
+        return new CookSessionMinePage(records, total);
+    }
+
+    /**
+     * 追加烹饪事件（仅会话所属用户）。
+     *
+     * @param sessionId 会话ID
+     * @param req 事件内容
+     */
+    public void appendEvent(Long sessionId, CookEventCreateReq req) {
+        assertSessionOwnedByCurrentUser(sessionId);
+        CookEvent row = new CookEvent();
+        row.setSessionId(sessionId);
+        row.setEventType(req.getEventType());
+        row.setEventTime(req.getEventTime());
+        row.setContent(req.getContent());
+        row.setRemark(req.getRemark());
+        cookEventMapper.insert(row);
+    }
+
+    /**
+     * 查询会话事件时间线（仅会话所属用户）。
+     *
+     * @param sessionId 会话ID
+     * @return 事件列表
+     */
+    public List<CookEventVO> listEventsForCurrentUser(Long sessionId) {
+        assertSessionOwnedByCurrentUser(sessionId);
+        return cookEventMapper.selectBySessionIdOrderByEventTimeAsc(sessionId).stream()
+                .map(this::toCookEventVo)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 查询复盘（仅会话所属用户）。
+     *
+     * @param sessionId 会话ID
+     * @return 复盘或 null
+     */
+    public SessionRetrospectiveVO getRetrospectiveForCurrentUser(Long sessionId) {
+        assertSessionOwnedByCurrentUser(sessionId);
+        SessionRetrospective row = sessionRetrospectiveMapper.selectBySessionId(sessionId);
+        if (row == null) {
+            return null;
+        }
+        SessionRetrospectiveVO vo = new SessionRetrospectiveVO();
+        vo.setId(row.getId());
+        vo.setSessionId(row.getSessionId());
+        vo.setSummary(row.getSummary());
+        vo.setImprovement(row.getImprovement());
+        vo.setRetryAdvice(row.getRetryAdvice());
+        vo.setRemark(row.getRemark());
+        vo.setUpdatedAt(row.getUpdatedAt());
+        return vo;
+    }
+
+    private CookEventVO toCookEventVo(CookEvent e) {
+        CookEventVO vo = new CookEventVO();
+        vo.setId(e.getId());
+        vo.setSessionId(e.getSessionId());
+        vo.setEventType(e.getEventType());
+        vo.setEventTime(e.getEventTime());
+        vo.setContent(e.getContent());
+        vo.setRemark(e.getRemark());
+        vo.setCreatedAt(e.getCreatedAt());
+        return vo;
+    }
+
+    /**
+     * 写入或更新复盘（仅会话所属用户）。
+     *
+     * @param sessionId 会话ID
+     * @param req 复盘内容
+     */
+    public void upsertRetrospectiveForCurrentUser(Long sessionId, SessionRetrospectiveUpsertReq req) {
+        assertSessionOwnedByCurrentUser(sessionId);
+        SessionRetrospective row = new SessionRetrospective();
+        row.setSessionId(sessionId);
+        row.setSummary(req.getSummary());
+        row.setImprovement(req.getImprovement());
+        row.setRetryAdvice(req.getRetryAdvice());
+        row.setRemark(req.getRemark());
+        sessionRetrospectiveMapper.upsert(row);
+    }
+
+    private Long requireUserId() {
+        LoginUser u = SecurityContextHolder.get();
+        if (u == null) {
+            throw new BizException(10002, "未登录或令牌无效");
+        }
+        return u.getUserId();
+    }
+
+    private void assertSessionOwnedByCurrentUser(Long sessionId) {
+        Long userId = requireUserId();
+        CookingSession session = requireSession(sessionId);
+        if (session.getUserId() == null || !session.getUserId().equals(userId)) {
+            throw new BizException(10015, "无权访问该会话");
+        }
+    }
+
+    private Long resolveSessionUserId() {
+        LoginUser u = SecurityContextHolder.get();
+        if (u != null) {
+            return u.getUserId();
+        }
+        return resolveOrCreateDevUserId();
     }
 
     private Long resolveOrCreateDevUserId() {

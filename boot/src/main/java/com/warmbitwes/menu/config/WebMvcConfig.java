@@ -18,7 +18,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor(tokenService))
-                .addPathPatterns("/api/admin/**");
+                .addPathPatterns(
+                        "/api/admin/**",
+                        "/api/cook-sessions/**",
+                        "/api/menu-templates/**",
+                        "/api/dropdown-options/**");
     }
 
     @Override

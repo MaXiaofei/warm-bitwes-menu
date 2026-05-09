@@ -45,6 +45,12 @@ public class DishController {
      * @param id 菜品ID
      * @return 菜品详情（含分类）
      */
+    @Operation(summary = "查询菜品食材关联", description = "返回当前菜品下食材用量列表。")
+    @GetMapping("/{id}/ingredients")
+    public ApiResponse<List<DishIngredient>> listIngredients(@PathVariable("id") Long id) {
+        return ApiResponse.success(dishService.listIngredientsByDishId(id));
+    }
+
     @Operation(summary = "查询菜品详情", description = "根据菜品ID查询菜品详情及分类信息。")
     @GetMapping("/{id}")
     public ApiResponse<DishDetailVO> getDetail(@PathVariable("id") Long id) {

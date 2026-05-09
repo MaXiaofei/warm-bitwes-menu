@@ -32,6 +32,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- DROP TABLE IF EXISTS dish;
 -- DROP TABLE IF EXISTS ingredient;
 
+-- DROP TABLE IF EXISTS biz_dropdown_option;
+
 -- DROP TABLE IF EXISTS user_role;
 -- DROP TABLE IF EXISTS app_user;
 -- DROP TABLE IF EXISTS role;
@@ -430,3 +432,29 @@ CREATE TABLE prep_item (
   CONSTRAINT fk_pi_session FOREIGN KEY (session_id) REFERENCES cooking_session (id),
   CONSTRAINT fk_pi_ingredient FOREIGN KEY (ingredient_id) REFERENCES ingredient (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='备菜项/采购清单';
+
+
+-- ----------------------------
+-- 下拉选项配置（管理端「下拉配置」等）
+-- ----------------------------
+CREATE TABLE biz_dropdown_option (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
+  category VARCHAR(64) NOT NULL COMMENT '分类编码，如 MENU_TEMPLATE_TYPE',
+  option_code VARCHAR(64) NOT NULL COMMENT '选项编码（业务解析用）',
+  option_label VARCHAR(128) NOT NULL COMMENT '展示文案',
+  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序（越小越靠前）',
+  enabled TINYINT NOT NULL DEFAULT 1 COMMENT '是否启用：0否 1是',
+  remark VARCHAR(512) DEFAULT NULL COMMENT '备注',
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '更新时间',
+  UNIQUE KEY uk_dd_cat_code (category, option_code),
+  KEY idx_dd_category (category),
+  KEY idx_dd_enabled (enabled)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='下拉选项配置';
+
+-- 模板类型（与 menu_template.template_type 注释 1–4 一致）
+INSERT INTO biz_dropdown_option (category, option_code, option_label, sort_order, enabled, remark) VALUES
+('MENU_TEMPLATE_TYPE', '1', '一日三餐', 10, 1, NULL),
+('MENU_TEMPLATE_TYPE', '2', '家宴菜单', 20, 1, NULL),
+('MENU_TEMPLATE_TYPE', '3', '节日菜单', 30, 1, NULL),
+('MENU_TEMPLATE_TYPE', '4', '自定义模板', 40, 1, NULL);

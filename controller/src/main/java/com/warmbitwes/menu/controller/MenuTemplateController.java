@@ -3,7 +3,10 @@ package com.warmbitwes.menu.controller;
 import com.warmbitwes.menu.common.ApiResponse;
 import com.warmbitwes.menu.dto.IdResp;
 import com.warmbitwes.menu.dto.MenuTemplateCreateReq;
+import com.warmbitwes.menu.dto.MenuTemplateUpdateReq;
 import com.warmbitwes.menu.entity.MenuTemplate;
+import com.warmbitwes.menu.security.RequirePermission;
+import com.warmbitwes.menu.service.MenuTemplatePage;
 import com.warmbitwes.menu.service.MenuTemplateService;
 import com.warmbitwes.menu.vo.MenuTemplateDetailVO;
 import com.warmbitwes.menu.vo.MenuTemplateIngredientSummaryVO;
@@ -15,9 +18,10 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -41,6 +45,7 @@ public class MenuTemplateController {
      * @return 模板ID
      */
     @Operation(summary = "新增菜单模板", description = "创建菜单模板并绑定菜品列表。")
+    @RequirePermission("menu-template:create")
     @PostMapping
     public ApiResponse<IdResp> create(@RequestBody @Valid MenuTemplateCreateReq req) {
         Long id = menuTemplateService.create(req.getName(), req.getTemplateType(), req.getDishIds());
@@ -50,15 +55,18 @@ public class MenuTemplateController {
     /**
      * 菜单模板分页查询。
      *
+     * @param name 名称模糊（可选）
      * @param pageNum 页码（从1开始）
      * @param pageSize 每页大小（最大100）
-     * @return 模板列表
+     * @return 分页结果
      */
-    @Operation(summary = "分页查询菜单模板", description = "按页码和每页大小查询菜单模板列表。")
+    @Operation(summary = "分页查询菜单模板", description = "按名称模糊与分页查询菜单模板列表。")
+    @RequirePermission("menu-template:list")
     @GetMapping
-    public ApiResponse<List<MenuTemplate>> page(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        return ApiResponse.success(menuTemplateService.listPage(pageNum, pageSize));
+    public ApiResponse<MenuTemplatePage> page(@RequestParam(value = "name", required = false) String name,
+                                              @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        return ApiResponse.success(menuTemplateService.listPage(name, pageNum, pageSize));
     }
 
     /**
@@ -68,6 +76,7 @@ public class MenuTemplateController {
      * @return 模板详情
      */
     @Operation(summary = "查询菜单模板详情", description = "根据模板ID查询模板基础信息及关联菜品ID列表。")
+    @RequirePermission("menu-template:detail")
     @GetMapping("/{id}")
     public ApiResponse<MenuTemplateDetailVO> getDetail(@Parameter(description = "模板ID", required = true)
                                                        @PathVariable("id") Long id) {
@@ -89,16 +98,32 @@ public class MenuTemplateController {
     }
 
     /**
+     * 更新菜单模板。
+     *
+     * @param id 模板ID
+     * @param req 更新请求
+     * @return success
+     */
+    @Operation(summary = "更新菜单模板", description = "更新模板基础信息并全量替换关联菜品。")
+    @RequirePermission("menu-template:update")
+    @PutMapping("/{id}")
+    public ApiResponse<Void> update(@Parameter(description = "模板ID", required = true) @PathVariable("id") Long id,
+                                    @RequestBody @Valid MenuTemplateUpdateReq req) {
+        menuTemplateService.update(id, req);
+        return ApiResponse.success();
+    }
+
+    /**
      * 查询模板食材汇总。
      *
      * @param id 模板ID
      * @return 汇总列表
      */
     @Operation(summary = "查询模板食材汇总", description = "按模板聚合食材总量，返回食材、单位和总克重。")
+    @RequirePermission("menu-template:ingredient-summary")
     @GetMapping("/{id}/ingredient-summary")
     public ApiResponse<List<MenuTemplateIngredientSummaryVO>> ingredientSummary(
             @Parameter(description = "模板ID", required = true) @PathVariable("id") Long id) {
         return ApiResponse.success(menuTemplateService.getIngredientSummary(id));
     }
 }
-

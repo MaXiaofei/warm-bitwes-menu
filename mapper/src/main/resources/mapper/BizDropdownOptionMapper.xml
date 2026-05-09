@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.BizDropdownOptionMapper">
+
+    <resultMap id="BizDropdownOptionMap" type="com.warmbitwes.menu.entity.BizDropdownOption">
+        <id property="id" column="id"/>
+        <result property="category" column="category"/>
+        <result property="optionCode" column="option_code"/>
+        <result property="optionLabel" column="option_label"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="enabled" column="enabled"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectEnabledByCategory" resultMap="BizDropdownOptionMap">
+        <!-- 下拉：分类下已启用项 -->
+        SELECT id, category, option_code, option_label, sort_order, enabled, remark, created_at, updated_at
+        FROM biz_dropdown_option
+        WHERE category = #{category} AND enabled = 1
+        ORDER BY sort_order ASC, id ASC
+    </select>
+
+    <select id="selectDistinctCategories" resultType="string">
+        <!-- 已启用项的分类列表 -->
+        SELECT DISTINCT category
+        FROM biz_dropdown_option
+        WHERE enabled = 1
+        ORDER BY category ASC
+    </select>
+
+    <select id="selectForAdmin" resultMap="BizDropdownOptionMap">
+        <!-- 管理端列表 -->
+        SELECT id, category, option_code, option_label, sort_order, enabled, remark, created_at, updated_at
+        FROM biz_dropdown_option
+        <where>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+        </where>
+        ORDER BY category ASC, sort_order ASC, id ASC
+    </select>
+
+    <select id="selectById" resultMap="BizDropdownOptionMap">
+        SELECT id, category, option_code, option_label, sort_order, enabled, remark, created_at, updated_at
+        FROM biz_dropdown_option
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.warmbitwes.menu.entity.BizDropdownOption" useGeneratedKeys="true" keyProperty="id">
+        <!-- 新增下拉选项 -->
+        INSERT INTO biz_dropdown_option(category, option_code, option_label, sort_order, enabled, remark)
+        VALUES (#{category}, #{optionCode}, #{optionLabel}, #{sortOrder}, #{enabled}, #{remark})
+    </insert>
+
+    <update id="updateById" parameterType="com.warmbitwes.menu.entity.BizDropdownOption">
+        <!-- 更新下拉选项 -->
+        UPDATE biz_dropdown_option
+        SET category = #{category},
+            option_code = #{optionCode},
+            option_label = #{optionLabel},
+            sort_order = #{sortOrder},
+            enabled = #{enabled},
+            remark = #{remark},
+            updated_at = CURRENT_TIMESTAMP(3)
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM biz_dropdown_option WHERE id = #{id}
+    </delete>
+</mapper>

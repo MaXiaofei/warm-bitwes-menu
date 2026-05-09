@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.SessionRetrospectiveMapper">
+
+    <resultMap id="SessionRetrospectiveMap" type="com.warmbitwes.menu.entity.SessionRetrospective">
+        <id property="id" column="id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="summary" column="summary"/>
+        <result property="improvement" column="improvement"/>
+        <result property="retryAdvice" column="retry_advice"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectBySessionId" resultMap="SessionRetrospectiveMap">
+        <!-- 按会话查询复盘 -->
+        SELECT id, session_id, summary, improvement, retry_advice, remark, created_at, updated_at
+        FROM session_retrospective
+        WHERE session_id = #{sessionId}
+        LIMIT 1
+    </select>
+
+    <insert id="upsert" parameterType="com.warmbitwes.menu.entity.SessionRetrospective">
+        <!-- 按 session_id UPSERT 复盘 -->
+        INSERT INTO session_retrospective(session_id, summary, improvement, retry_advice, remark)
+        VALUES (#{sessionId}, #{summary}, #{improvement}, #{retryAdvice}, #{remark})
+        ON DUPLICATE KEY UPDATE
+            summary = VALUES(summary),
+            improvement = VALUES(improvement),
+            retry_advice = VALUES(retry_advice),
+            remark = VALUES(remark),
+            updated_at = CURRENT_TIMESTAMP(3)
+    </insert>
+</mapper>

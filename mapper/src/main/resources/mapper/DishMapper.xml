@@ -88,6 +88,21 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <resultMap id="DishIngredientMap" type="com.warmbitwes.menu.entity.DishIngredient">
+        <result property="dishId" column="dish_id"/>
+        <result property="ingredientId" column="ingredient_id"/>
+        <result property="amountG" column="amount_g"/>
+        <result property="sortOrder" column="sort_order"/>
+    </resultMap>
+
+    <select id="selectIngredientsByDishId" resultMap="DishIngredientMap">
+        <!-- 查询菜品食材关联 -->
+        SELECT dish_id, ingredient_id, amount_g, sort_order
+        FROM dish_ingredient
+        WHERE dish_id = #{dishId}
+        ORDER BY sort_order ASC, ingredient_id ASC
+    </select>
+
     <delete id="deleteIngredientsByDishId" parameterType="long">
         <!-- 删除菜品全部食材关联（用于全量替换） -->
         DELETE FROM dish_ingredient

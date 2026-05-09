@@ -30,13 +30,38 @@ public interface MenuTemplateMapper {
     int batchInsertTemplateDishes(@Param("items") List<MenuTemplateDish> items);
 
     /**
-     * 模板分页查询（按创建时间倒序）。
+     * 模板分页查询（按创建时间倒序，名称模糊可选）。
      *
+     * @param keyword 名称关键字（可空）
      * @param offset 偏移量（从0开始）
      * @param limit 每页大小
      * @return 模板列表
      */
-    List<MenuTemplate> selectPage(@Param("offset") int offset, @Param("limit") int limit);
+    List<MenuTemplate> selectPage(@Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit);
+
+    /**
+     * 模板分页总数（与 selectPage 筛选一致）。
+     *
+     * @param keyword 名称关键字（可空）
+     * @return 总数
+     */
+    long countPage(@Param("keyword") String keyword);
+
+    /**
+     * 更新模板基础字段。
+     *
+     * @param template 模板
+     * @return 影响行数
+     */
+    int updateById(MenuTemplate template);
+
+    /**
+     * 删除模板下全部菜品关联。
+     *
+     * @param templateId 模板ID
+     * @return 影响行数
+     */
+    int deleteTemplateDishesByTemplateId(@Param("templateId") Long templateId);
 
     /**
      * 按 ID 查询模板。

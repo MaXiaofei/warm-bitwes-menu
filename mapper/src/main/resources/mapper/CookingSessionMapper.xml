@@ -28,5 +28,32 @@
         FROM cooking_session
         WHERE id = #{id}
     </select>
+
+    <select id="countByUserId" resultType="long">
+        <!-- 统计用户会话数量 -->
+        SELECT COUNT(*) FROM cooking_session WHERE user_id = #{userId}
+    </select>
+
+    <resultMap id="CookingSessionMineRowMap" type="com.warmbitwes.menu.entity.CookingSessionMineRow">
+        <id property="id" column="id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="templateName" column="template_name"/>
+        <result property="startedAt" column="started_at"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="selectMineByUserId" resultMap="CookingSessionMineRowMap">
+        <!-- 用户会话分页列表 -->
+        SELECT cs.id,
+               cs.template_id,
+               mt.name AS template_name,
+               cs.started_at,
+               cs.status
+        FROM cooking_session cs
+        LEFT JOIN menu_template mt ON mt.id = cs.template_id
+        WHERE cs.user_id = #{userId}
+        ORDER BY cs.started_at DESC, cs.id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
 </mapper>
 

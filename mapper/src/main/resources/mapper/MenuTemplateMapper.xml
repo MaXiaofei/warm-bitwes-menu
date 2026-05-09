@@ -36,12 +36,47 @@
     </insert>
 
     <select id="selectPage" resultMap="MenuTemplateMap">
-        <!-- 模板分页查询：按创建时间倒序 -->
+        <!-- 模板分页查询：按创建时间倒序，名称模糊可选 -->
         SELECT id, name, template_type, scene, flavor, crowd, description, status, created_by, remark, created_at, updated_at
         FROM menu_template
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND name LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
         ORDER BY id DESC
         LIMIT #{limit} OFFSET #{offset}
     </select>
+
+    <select id="countPage" resultType="long">
+        <!-- 模板分页总数 -->
+        SELECT COUNT(*) FROM menu_template
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND name LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+
+    <update id="updateById" parameterType="com.warmbitwes.menu.entity.MenuTemplate">
+        <!-- 更新菜单模板 -->
+        UPDATE menu_template
+        SET name = #{name},
+            template_type = #{templateType},
+            scene = #{scene},
+            flavor = #{flavor},
+            crowd = #{crowd},
+            description = #{description},
+            status = #{status},
+            remark = #{remark},
+            updated_at = CURRENT_TIMESTAMP(3)
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteTemplateDishesByTemplateId">
+        <!-- 删除模板菜品关联 -->
+        DELETE FROM menu_template_dish WHERE template_id = #{templateId}
+    </delete>
 
     <select id="selectById" parameterType="long" resultMap="MenuTemplateMap">
         <!-- 按主键查询菜单模板 -->
