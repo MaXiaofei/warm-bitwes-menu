@@ -1,12 +1,15 @@
 package com.warmbitwes.menu.service;
 
 import com.warmbitwes.menu.entity.CookingSession;
+import com.warmbitwes.menu.entity.DishDetail;
 import com.warmbitwes.menu.entity.MenuTemplate;
 import com.warmbitwes.menu.entity.PrepItem;
+import com.warmbitwes.menu.entity.SessionDish;
 import com.warmbitwes.menu.entity.SessionReview;
 import com.warmbitwes.menu.exception.BizException;
 import com.warmbitwes.menu.mapper.AppUserMapper;
 import com.warmbitwes.menu.mapper.CookingSessionMapper;
+import com.warmbitwes.menu.mapper.DishMapper;
 import com.warmbitwes.menu.mapper.MenuTemplateMapper;
 import com.warmbitwes.menu.mapper.P2Mapper;
 import com.warmbitwes.menu.vo.PrepItemVO;
@@ -14,6 +17,7 @@ import com.warmbitwes.menu.vo.SessionReviewVO;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -31,27 +35,50 @@ public class CookSessionService {
     private final AppUserMapper appUserMapper;
     private final MenuTemplateMapper menuTemplateMapper;
     private final P2Mapper p2Mapper;
+    private final DishMapper dishMapper;
 
     public CookSessionService(CookingSessionMapper cookingSessionMapper,
                               MenuTemplateService menuTemplateService,
                               AppUserMapper appUserMapper,
                               MenuTemplateMapper menuTemplateMapper,
-                              P2Mapper p2Mapper) {
+                              P2Mapper p2Mapper,
+                              DishMapper dishMapper) {
         this.cookingSessionMapper = cookingSessionMapper;
         this.menuTemplateService = menuTemplateService;
         this.appUserMapper = appUserMapper;
         this.menuTemplateMapper = menuTemplateMapper;
         this.p2Mapper = p2Mapper;
+        this.dishMapper = dishMapper;
     }
 
     /**
-     * 创建做饭会话。
+     * 创建做饭会话：菜单模板与自选菜品二选一，开始时间必填。
      *
-     * @param templateId 模板ID
-     * @param startedAt 开始时间
+     * @param templateId 模板ID（可选）
+     * @param dishIds    自选菜品ID列表（可选，与模板二选一）
+     * @param startedAt  开始时间
      * @return 会话ID
      */
-    public Long create(Long templateId, LocalDateTime startedAt) {
+    public Long create(Long templateId, List<Long> dishIds, LocalDateTime startedAt) {
+        if (startedAt == null) {
+            throw new BizException(10012, "开始时间不能为空");
+        }
+        List<Long> dishList = dishIds == null ? List.of() : dishIds.stream().filter(id -> id != null).toList();
+        boolean hasTemplate = templateId != null;
+        boolean hasDishes = !dishList.isEmpty();
+        if (!hasTemplate && !hasDishes) {
+            throw new BizException(10013, "请选择菜单模板或自选菜品");
+        }
+        if (hasTemplate && hasDishes) {
+            throw new BizException(10014, "菜单模板与自选菜品仅能选一种");
+        }
+        if (hasTemplate) {
+            return createFromTemplate(templateId, startedAt);
+        }
+        return createFromDishList(dishList, startedAt);
+    }
+
+    private Long createFromTemplate(Long templateId, LocalDateTime startedAt) {
         MenuTemplate template = menuTemplateService.getById(templateId);
 
         CookingSession session = new CookingSession();
@@ -64,6 +91,41 @@ public class CookSessionService {
         session.setStartedAt(startedAt);
         cookingSessionMapper.insert(session);
         return session.getId();
+    }
+
+    private Long createFromDishList(List<Long> dishIds, LocalDateTime startedAt) {
+        List<Long> orderedUnique = new ArrayList<>(new LinkedHashSet<>(dishIds));
+        for (Long dishId : orderedUnique) {
+            DishDetail dish = dishMapper.selectById(dishId);
+            if (dish == null) {
+                throw new BizException(40402, "菜品不存在，id=" + dishId);
+            }
+        }
+
+        CookingSession session = new CookingSession();
+        session.setUserId(resolveOrCreateDevUserId());
+        session.setTemplateId(null);
+        session.setScene(null);
+        session.setFlavor(null);
+        session.setCrowd(null);
+        session.setStatus(1);
+        session.setStartedAt(startedAt);
+        cookingSessionMapper.insert(session);
+        Long sessionId = session.getId();
+
+        List<SessionDish> rows = new ArrayList<>();
+        int sort = 0;
+        for (Long dishId : orderedUnique) {
+            SessionDish row = new SessionDish();
+            row.setSessionId(sessionId);
+            row.setDishId(dishId);
+            row.setSortOrder(sort++);
+            rows.add(row);
+        }
+        if (!rows.isEmpty()) {
+            p2Mapper.batchInsertSessionDishes(rows);
+        }
+        return sessionId;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.warmbitwes.menu.mapper;
 
 import com.warmbitwes.menu.entity.PrepItem;
+import com.warmbitwes.menu.entity.SessionDish;
 import com.warmbitwes.menu.entity.SessionReview;
 import java.util.List;
 import java.util.Map;
@@ -52,5 +53,13 @@ public interface P2Mapper {
      * @return 点评行
      */
     List<Map<String, Object>> selectReviewsBySessionId(@Param("sessionId") Long sessionId);
+
+    /**
+     * 批量写入会话-菜品（自选菜单）。
+     *
+     * @param rows 行列表
+     * @return 影响行数
+     */
+    int batchInsertSessionDishes(@Param("rows") List<SessionDish> rows);
 }
 

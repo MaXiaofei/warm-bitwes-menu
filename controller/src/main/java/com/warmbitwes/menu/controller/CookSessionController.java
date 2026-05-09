@@ -42,7 +42,7 @@ public class CookSessionController {
     @Operation(summary = "创建做饭会话", description = "基于菜单模板创建一次新的做饭会话。")
     @PostMapping
     public ApiResponse<CookSessionCreateResp> create(@RequestBody @Valid CookSessionCreateReq req) {
-        Long sessionId = cookSessionService.create(req.getTemplateId(), req.getStartedAt());
+        Long sessionId = cookSessionService.create(req.getTemplateId(), req.getDishIds(), req.getStartedAt());
         return ApiResponse.success(new CookSessionCreateResp(sessionId));
     }
 

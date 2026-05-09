@@ -40,6 +40,15 @@
         VALUES (#{sessionId}, NULL, #{tasteScore}, NULL, NULL, NULL, NULL)
     </insert>
 
+    <insert id="batchInsertSessionDishes">
+        <!-- 批量写入会话-菜品（自选菜单） -->
+        INSERT INTO session_dish(session_id, dish_id, sort_order, remark)
+        VALUES
+        <foreach collection="rows" item="r" separator=",">
+            (#{r.sessionId}, #{r.dishId}, #{r.sortOrder}, NULL)
+        </foreach>
+    </insert>
+
     <select id="selectReviewsBySessionId" parameterType="long" resultType="map">
         <!-- 查询会话点评列表 -->
         SELECT
