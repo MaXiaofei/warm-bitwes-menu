@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.MenuTemplateMapper">
+
+    <resultMap id="MenuTemplateMap" type="com.warmbitwes.menu.entity.MenuTemplate">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="templateType" column="template_type"/>
+        <result property="scene" column="scene"/>
+        <result property="flavor" column="flavor"/>
+        <result property="crowd" column="crowd"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.warmbitwes.menu.entity.MenuTemplate"
+            useGeneratedKeys="true" keyProperty="id">
+        <!-- 新增菜单模板（返回自增主键 id） -->
+        INSERT INTO menu_template(name, template_type, scene, flavor, crowd, description, status, created_by, remark)
+        VALUES (#{name}, #{templateType}, #{scene}, #{flavor}, #{crowd}, #{description}, #{status}, #{createdBy}, #{remark})
+    </insert>
+
+    <insert id="batchInsertTemplateDishes">
+        <!-- 批量新增模板-菜品关联 -->
+        INSERT INTO menu_template_dish(template_id, dish_id, sort_order, remark)
+        VALUES
+        <foreach collection="items" item="item" separator=",">
+            (#{item.templateId}, #{item.dishId}, #{item.sortOrder}, NULL)
+        </foreach>
+    </insert>
+
+    <select id="selectPage" resultMap="MenuTemplateMap">
+        <!-- 模板分页查询：按创建时间倒序 -->
+        SELECT id, name, template_type, scene, flavor, crowd, description, status, created_by, remark, created_at, updated_at
+        FROM menu_template
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectById" parameterType="long" resultMap="MenuTemplateMap">
+        <!-- 按主键查询菜单模板 -->
+        SELECT id, name, template_type, scene, flavor, crowd, description, status, created_by, remark, created_at, updated_at
+        FROM menu_template
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectDishIdsByTemplateId" parameterType="long" resultType="long">
+        <!-- 查询模板关联的菜品ID列表 -->
+        SELECT dish_id
+        FROM menu_template_dish
+        WHERE template_id = #{templateId}
+        ORDER BY sort_order ASC, dish_id ASC
+    </select>
+
+    <select id="selectIngredientSummaryByTemplateId" parameterType="long" resultType="map">
+        <!-- 模板食材汇总：按食材聚合 dish_ingredient.amount_g -->
+        SELECT
+            i.id AS ingredientId,
+            i.name AS ingredientName,
+            i.unit AS unit,
+            SUM(di.amount_g) AS totalAmountG
+        FROM menu_template_dish mtd
+        INNER JOIN dish_ingredient di ON di.dish_id = mtd.dish_id
+        INNER JOIN ingredient i ON i.id = di.ingredient_id
+        WHERE mtd.template_id = #{templateId}
+        GROUP BY i.id, i.name, i.unit
+        ORDER BY i.id ASC
+    </select>
+</mapper>
+

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.warmbitwes.menu</groupId>
+  <artifactId>menu-parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>warmbitwes-menu-parent</name>
+
+  <modules>
+    <module>common</module>
+    <module>mapper</module>
+    <module>service</module>
+    <module>controller</module>
+    <module>boot</module>
+  </modules>
+
+  <properties>
+    <java.version>17</java.version>
+    <spring-boot.version>3.2.12</spring-boot.version>
+    <springdoc.version>2.3.0</springdoc.version>
+    <mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
+    <xxl-job-core.version>3.4.0</xxl-job-core.version>
+    <!-- 默认环境：dev（可通过 mvn -Ppro 切换） -->
+    <spring.profiles.active>dev</spring.profiles.active>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <release>${java.version}</release>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <spring.profiles.active>dev</spring.profiles.active>
+      </properties>
+    </profile>
+    <profile>
+      <id>pro</id>
+      <properties>
+        <spring.profiles.active>pro</spring.profiles.active>
+      </properties>
+    </profile>
+  </profiles>
+</project>
+

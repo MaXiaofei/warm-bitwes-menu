@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warmbitwes.menu.mapper.AppUserMapper">
+    <resultMap id="AppUserMap" type="com.warmbitwes.menu.entity.AppUser">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="passwordHash" column="password_hash"/>
+        <result property="nickname" column="nickname"/>
+        <result property="phone" column="phone"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectByUsername" resultMap="AppUserMap">
+        SELECT id, username, password_hash, nickname, phone, status, remark, created_at, updated_at
+        FROM app_user
+        WHERE username = #{username}
+        LIMIT 1
+    </select>
+
+    <select id="selectAnyUserId" resultType="long">
+        <!-- 查询任意一个用户ID（用于联调兜底） -->
+        SELECT id
+        FROM app_user
+        ORDER BY id ASC
+        LIMIT 1
+    </select>
+
+    <select id="selectIdByUsername" parameterType="string" resultType="long">
+        <!-- 按用户名查询用户ID -->
+        SELECT id
+        FROM app_user
+        WHERE username = #{username}
+        LIMIT 1
+    </select>
+
+    <insert id="insertDevUser" parameterType="string">
+        <!-- 新增联调默认用户 -->
+        INSERT INTO app_user(username, password_hash, nickname, status, remark)
+        VALUES (#{username}, 'dev_password_hash', '联调用户', 1, '自动创建用于联调')
+    </insert>
+
+    <select id="selectAdminUsers" resultMap="AppUserMap">
+        SELECT id, username, password_hash, nickname, phone, status, remark, created_at, updated_at
+        FROM app_user
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insertAdminUser" parameterType="com.warmbitwes.menu.entity.AppUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO app_user(username, password_hash, nickname, phone, status, remark)
+        VALUES (#{username}, #{passwordHash}, #{nickname}, #{phone}, #{status}, #{remark})
+    </insert>
+
+    <update id="updateAdminUserById" parameterType="com.warmbitwes.menu.entity.AppUser">
+        UPDATE app_user
+        SET nickname = #{nickname},
+            phone = #{phone},
+            status = #{status},
+            remark = #{remark}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updatePasswordById">
+        UPDATE app_user
+        SET password_hash = #{passwordHash}
+        WHERE id = #{id}
+    </update>
+</mapper>
+
